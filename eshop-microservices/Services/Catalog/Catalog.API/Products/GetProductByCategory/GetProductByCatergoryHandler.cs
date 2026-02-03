@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.Extensions.Logging;
+using NetTopologySuite.Index.HPRtree;
 
 namespace Catalog.API.Products.GetProductByCategory
 {
@@ -11,7 +12,9 @@ namespace Catalog.API.Products.GetProductByCategory
         {
             logger.LogInformation($"GetProductByCatergoryHandler.Hanlde called with {query}");
 
-            var products = await session.Query<Product>().ToListAsync(cancellationToken);
+            var products = await session.Query<Product>().Where(p => p.Category.Contains(query.Category)).ToListAsync(cancellationToken);
+
+            return new GetProductByCategoryResult(products);
         }
     }
 }
