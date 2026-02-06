@@ -3,7 +3,7 @@ using Marten;
 
 namespace Catalog.API.Products.GetProductById
 {
-    public record GetProductByIdQuery(Guid id) : IQuery<GetProductByIdResult>; 
+    public record GetProductByIdQuery(Guid Id) : IQuery<GetProductByIdResult>; 
     public record GetProductByIdResult(Product Product);
     public class GetProductByIdQueryHandler(IDocumentSession session, ILogger<GetProductByIdQueryHandler> logger) 
         : IqueryHandler<GetProductByIdQuery, GetProductByIdResult>
@@ -12,11 +12,11 @@ namespace Catalog.API.Products.GetProductById
         {
             logger.LogInformation($"GetProductByIdQueryHandler.Hanlde called with {query}");
 
-            var product = await session.LoadAsync<Product>(query.id, cancellationToken);
+            var product = await session.LoadAsync<Product>(query.Id, cancellationToken);
 
             if(product is null)
             {
-                throw new ProductNotFloundException();
+                throw new ProductNotFoundException(query.Id);
             }
 
             return new GetProductByIdResult(product);
