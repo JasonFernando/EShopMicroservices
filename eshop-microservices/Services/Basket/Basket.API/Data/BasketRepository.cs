@@ -48,5 +48,9 @@
             // MARTEN: Delete por ID.
             // Marca el objeto para ser eliminado. Marten sabe qué tabla tocar basándose en el tipo genérico <ShoppingCart>.
             session.Delete<ShoppingCart>(userName);
-
-            // Persistencia
+            await session.SaveChangesAsync(cancellationToken);
+            return true;
+        }
+        // Persistencia
+    }
+}
